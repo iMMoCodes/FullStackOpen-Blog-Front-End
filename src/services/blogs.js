@@ -30,3 +30,10 @@ export const update = async (newObject, id) => {
   const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
   return response.data
 }
+
+export const deleteBlog = async (id) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  await axios.delete(`${baseUrl}/${id}`, config)
+}
