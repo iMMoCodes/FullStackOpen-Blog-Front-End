@@ -1,16 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { create } from '../services/blogs'
 
-const CreateBlogForm = ({
-  blogTitle,
-  blogAuthor,
-  blogUrl,
-  setNotification,
-  setBlogTitle,
-  setBlogAuthor,
-  setBlogUrl,
-  setCreateBlogVisible,
-}) => {
+const BlogForm = ({ setNotification, blogFormRef }) => {
+  const [blogTitle, setBlogTitle] = useState('')
+  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
+
   const handleCreateBlog = (e) => {
     e.preventDefault()
     if (blogTitle && blogAuthor && blogUrl) {
@@ -19,7 +14,7 @@ const CreateBlogForm = ({
       setBlogTitle('')
       setBlogAuthor('')
       setBlogUrl('')
-      setCreateBlogVisible(false)
+      blogFormRef.current.toggleVisibility()
       setTimeout(() => {
         setNotification(null)
       }, 5000)
@@ -72,4 +67,4 @@ const CreateBlogForm = ({
   )
 }
 
-export default CreateBlogForm
+export default BlogForm

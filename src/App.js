@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import { setToken, getAll } from './services/blogs'
 import { login } from './services/login'
-import CreateBlogForm from './components/CreateBlogForm'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -10,13 +11,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
   const [notification, setNotification] = useState(null)
-  const [createBlogVisible, setCreateBlogVisible] = useState(false)
-  const hideWhenVisible = { display: createBlogVisible ? 'none' : '' }
-  const showWhenVisible = { display: createBlogVisible ? '' : 'none' }
+  const blogFormRef = useRef()
 
   useEffect(() => {
     getAll().then((blogs) => setBlogs(blogs))
@@ -98,32 +94,9 @@ const App = () => {
           Logout
         </button>
       </div>
-      <div style={hideWhenVisible}>
-        <button
-          onClick={() => setCreateBlogVisible(true)}
-          style={{ marginBottom: 20 }}
-        >
-          Create new blog
-        </button>
-      </div>
-      <div style={showWhenVisible}>
-        <CreateBlogForm
-          blogTitle={blogTitle}
-          setBlogTitle={setBlogTitle}
-          blogAuthor={blogAuthor}
-          setBlogAuthor={setBlogAuthor}
-          blogUrl={blogUrl}
-          setBlogUrl={setBlogUrl}
-          setNotification={setNotification}
-          setCreateBlogVisible={setCreateBlogVisible}
-        />
-        <button
-          onClick={() => setCreateBlogVisible(false)}
-          style={{ marginBottom: 20 }}
-        >
-          Cancel
-        </button>
-      </div>
+      <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
+        <BlogForm setNotification={setNotification} blogFormRef={blogFormRef} />
+      </Togglable>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
