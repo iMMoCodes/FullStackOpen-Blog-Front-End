@@ -15,7 +15,9 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    getAll().then((blogs) => setBlogs(blogs))
+    if (user !== null) {
+      getAll().then((blogs) => setBlogs(blogs))
+    }
   }, [user])
 
   useEffect(() => {
