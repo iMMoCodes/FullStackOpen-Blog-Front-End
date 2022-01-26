@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import { setToken, getAll, create } from './services/blogs'
+import { setToken, getAll } from './services/blogs'
 import { login } from './services/login'
+import CreateBlogForm from './components/CreateBlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,6 +14,9 @@ const App = () => {
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
   const [notification, setNotification] = useState(null)
+  const [createBlogVisible, setCreateBlogVisible] = useState(false)
+  const hideWhenVisible = { display: createBlogVisible ? 'none' : '' }
+  const showWhenVisible = { display: createBlogVisible ? '' : 'none' }
 
   useEffect(() => {
     getAll().then((blogs) => setBlogs(blogs))
@@ -50,25 +54,6 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
-  }
-
-  const handleCreateBlog = (e) => {
-    e.preventDefault()
-    if (blogTitle && blogAuthor && blogUrl) {
-      create({ title: blogTitle, author: blogAuthor, url: blogUrl })
-      setNotification(`a new blog ${blogTitle} by ${blogAuthor} added`)
-      setBlogTitle('')
-      setBlogAuthor('')
-      setBlogUrl('')
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    } else {
-      setNotification(`Please fill all the fields to add a blog`)
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    }
   }
 
   if (user === null) {
@@ -113,42 +98,31 @@ const App = () => {
           Logout
         </button>
       </div>
-      <div style={{ marginBottom: 50 }}>
-        <h1>Create new</h1>
-        <form onSubmit={handleCreateBlog}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p style={{ width: 50 }}>Title:</p>
-            <input
-              style={{ height: 20 }}
-              type='text'
-              value={blogTitle}
-              name='Title'
-              onChange={({ target }) => setBlogTitle(target.value)}
-            />
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p style={{ width: 50 }}>Author:</p>
-            <input
-              style={{ height: 20 }}
-              type='text'
-              value={blogAuthor}
-              name='Author'
-              onChange={({ target }) => setBlogAuthor(target.value)}
-            />
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <p style={{ width: 50 }}>Url:</p>
-            <input
-              style={{ height: 20 }}
-              type='text'
-              value={blogUrl}
-              name='Url'
-              onChange={({ target }) => setBlogUrl(target.value)}
-            />
-          </div>
-
-          <button>Create</button>
-        </form>
+      <div style={hideWhenVisible}>
+        <button
+          onClick={() => setCreateBlogVisible(true)}
+          style={{ marginBottom: 20 }}
+        >
+          Create new blog
+        </button>
+      </div>
+      <div style={showWhenVisible}>
+        <CreateBlogForm
+          blogTitle={blogTitle}
+          setBlogTitle={setBlogTitle}
+          blogAuthor={blogAuthor}
+          setBlogAuthor={setBlogAuthor}
+          blogUrl={blogUrl}
+          setBlogUrl={setBlogUrl}
+          setNotification={setNotification}
+          setCreateBlogVisible={setCreateBlogVisible}
+        />
+        <button
+          onClick={() => setCreateBlogVisible(false)}
+          style={{ marginBottom: 20 }}
+        >
+          Cancel
+        </button>
       </div>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
