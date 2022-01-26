@@ -8,10 +8,20 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   useEffect(() => {
     getAll().then((blogs) => setBlogs(blogs))
   }, [blogs, user])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      setToken(user.token)
+    }
+  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -20,13 +30,22 @@ const App = () => {
         username,
         password,
       })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log(exception)
+      setErrorMsg('Wrong credentials')
+      setTimeout(() => {
+        setErrorMsg(null)
+      }, 5000)
     }
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogappUser')
+    setUser(null)
   }
 
   if (user === null) {
@@ -34,6 +53,7 @@ const App = () => {
       <>
         <div>
           <h2>Log in to application</h2>
+          {errorMsg && <h3 style={{ color: 'red' }}>{errorMsg}</h3>}
           <form onSubmit={handleLogin}>
             <div>
               username
@@ -63,7 +83,12 @@ const App = () => {
   return (
     <div>
       <h1>blogs</h1>
-      <h4>{user.name} logged in</h4>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <h4>{user.name} logged in</h4>
+        <button style={{ marginLeft: 5, height: 25 }} onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
