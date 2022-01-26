@@ -12,6 +12,7 @@ const App = () => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     getAll().then((blogs) => setBlogs(blogs))
@@ -39,7 +40,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMsg('Wrong credentials')
+      setErrorMsg('Wrong username or password')
       setTimeout(() => {
         setErrorMsg(null)
       }, 5000)
@@ -53,7 +54,21 @@ const App = () => {
 
   const handleCreateBlog = (e) => {
     e.preventDefault()
-    create({ title: blogTitle, author: blogAuthor, url: blogUrl })
+    if (blogTitle && blogAuthor && blogUrl) {
+      create({ title: blogTitle, author: blogAuthor, url: blogUrl })
+      setNotification(`a new blog ${blogTitle} by ${blogAuthor} added`)
+      setBlogTitle('')
+      setBlogAuthor('')
+      setBlogUrl('')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    } else {
+      setNotification(`Please fill all the fields to add a blog`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    }
   }
 
   if (user === null) {
@@ -91,6 +106,7 @@ const App = () => {
   return (
     <>
       <h1>blogs</h1>
+      {notification && <h2>{notification}</h2>}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <h4>{user.name} logged in</h4>
         <button style={{ marginLeft: 5, height: 25 }} onClick={handleLogout}>
