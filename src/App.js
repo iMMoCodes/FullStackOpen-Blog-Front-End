@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import { setToken, getAll } from './services/blogs'
+import { setToken, getAll, create } from './services/blogs'
 import { login } from './services/login'
 
 const App = () => {
@@ -9,6 +9,9 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
+  const [blogTitle, setBlogTitle] = useState('')
+  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
 
   useEffect(() => {
     getAll().then((blogs) => setBlogs(blogs))
@@ -48,6 +51,11 @@ const App = () => {
     setUser(null)
   }
 
+  const handleCreateBlog = (e) => {
+    e.preventDefault()
+    create({ title: blogTitle, author: blogAuthor, url: blogUrl })
+  }
+
   if (user === null) {
     return (
       <>
@@ -81,7 +89,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <>
       <h1>blogs</h1>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <h4>{user.name} logged in</h4>
@@ -89,10 +97,47 @@ const App = () => {
           Logout
         </button>
       </div>
+      <div style={{ marginBottom: 50 }}>
+        <h1>Create new</h1>
+        <form onSubmit={handleCreateBlog}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <p style={{ width: 50 }}>Title:</p>
+            <input
+              style={{ height: 20 }}
+              type='text'
+              value={blogTitle}
+              name='Title'
+              onChange={({ target }) => setBlogTitle(target.value)}
+            />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <p style={{ width: 50 }}>Author:</p>
+            <input
+              style={{ height: 20 }}
+              type='text'
+              value={blogAuthor}
+              name='Author'
+              onChange={({ target }) => setBlogAuthor(target.value)}
+            />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <p style={{ width: 50 }}>Url:</p>
+            <input
+              style={{ height: 20 }}
+              type='text'
+              value={blogUrl}
+              name='Url'
+              onChange={({ target }) => setBlogUrl(target.value)}
+            />
+          </div>
+
+          <button>Create</button>
+        </form>
+      </div>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
-    </div>
+    </>
   )
 }
 
