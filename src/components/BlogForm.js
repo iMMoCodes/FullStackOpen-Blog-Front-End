@@ -19,7 +19,7 @@ const BlogForm = ({ setNotification, blogFormRef }) => {
         setNotification(null)
       }, 5000)
     } else {
-      setNotification(`Please fill all the fields to add a blog`)
+      setNotification('Please fill all the fields to add a blog')
       setTimeout(() => {
         setNotification(null)
       }, 5000)

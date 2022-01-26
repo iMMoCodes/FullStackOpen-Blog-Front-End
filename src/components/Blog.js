@@ -33,7 +33,7 @@ const Blog = ({ blog, user }) => {
 
   return (
     <>
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blog'>
         {blog.title} {blog.author}
         <button
           onClick={handleClick}
