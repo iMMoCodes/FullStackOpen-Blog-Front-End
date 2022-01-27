@@ -45,7 +45,10 @@ const Blog = ({ blog, user }) => {
           <>
             <p>URL : {blog.url}</p>
             <p>
-              Likes : {blog.likes} <button onClick={handleLike}>Like</button>
+              Likes : {blog.likes}{' '}
+              <button onClick={handleLike} className='likeButton'>
+                Like
+              </button>
             </p>
             <p>User: {blog.user.name}</p>
             {user.username === blog.user.username && (
