@@ -63,7 +63,7 @@ const BlogForm = ({ setNotification, blogFormRef, create }) => {
           />
         </div>
 
-        <button>Create</button>
+        <button id='create-blog-button'>Create</button>
       </form>
     </div>
   )
