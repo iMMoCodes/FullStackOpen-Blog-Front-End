@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { create } from '../services/blogs'
 
-const BlogForm = ({ setNotification, blogFormRef }) => {
+const BlogForm = ({ setNotification, blogFormRef, create }) => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
@@ -27,14 +26,15 @@ const BlogForm = ({ setNotification, blogFormRef }) => {
   }
 
   return (
-    <div style={{ marginBottom: 10 }}>
+    <div style={{ marginBottom: 10 }} className='formDiv'>
       <h1>Create new</h1>
-      <form onSubmit={handleCreateBlog}>
+      <form onSubmit={handleCreateBlog} className='blogForm'>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <p style={{ width: 50 }}>Title:</p>
           <input
             style={{ height: 20 }}
             type='text'
+            id='title'
             value={blogTitle}
             name='Title'
             onChange={({ target }) => setBlogTitle(target.value)}
@@ -45,6 +45,7 @@ const BlogForm = ({ setNotification, blogFormRef }) => {
           <input
             style={{ height: 20 }}
             type='text'
+            id='author'
             value={blogAuthor}
             name='Author'
             onChange={({ target }) => setBlogAuthor(target.value)}
@@ -55,6 +56,7 @@ const BlogForm = ({ setNotification, blogFormRef }) => {
           <input
             style={{ height: 20 }}
             type='text'
+            id='url'
             value={blogUrl}
             name='Url'
             onChange={({ target }) => setBlogUrl(target.value)}
