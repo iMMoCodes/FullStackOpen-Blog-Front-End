@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
-import { setToken, getAll, create } from "./services/blogs";
+import { setToken } from "./services/blogs";
 import { login } from "./services/login";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
+  const dispatch = useDispatch();
   const notification = useSelector((state) => state.notification);
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector((state) => state.blogs);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -17,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     if (user !== null) {
-      getAll().then((blogs) => setBlogs(blogs));
+      dispatch(initializeBlogs());
     }
   }, [user]);
 
@@ -55,9 +57,11 @@ const App = () => {
     setUser(null);
   };
 
-  blogs.sort(function (a, b) {
-    return a.likes - b.likes;
-  });
+  // if (blogs !== []) {
+  //   blogs.sort(function (a, b) {
+  //     return a.likes - b.likes;
+  //   });
+  // }
 
   if (user === null) {
     return (
@@ -106,7 +110,7 @@ const App = () => {
         </button>
       </div>
       <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-        <BlogForm blogFormRef={blogFormRef} create={create} />
+        <BlogForm blogFormRef={blogFormRef} />
       </Togglable>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} user={user} />

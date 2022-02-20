@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer";
 
-const BlogForm = ({ blogFormRef, create }) => {
+const BlogForm = ({ blogFormRef }) => {
   const dispatch = useDispatch();
   const [blogTitle, setBlogTitle] = useState("");
   const [blogAuthor, setBlogAuthor] = useState("");
@@ -11,7 +12,9 @@ const BlogForm = ({ blogFormRef, create }) => {
   const handleCreateBlog = (e) => {
     e.preventDefault();
     if (blogTitle && blogAuthor && blogUrl) {
-      create({ title: blogTitle, author: blogAuthor, url: blogUrl });
+      dispatch(
+        createBlog({ title: blogTitle, author: blogAuthor, url: blogUrl })
+      );
       dispatch(
         setNotification(`a new blog ${blogTitle} by ${blogAuthor} added`, 5)
       );
