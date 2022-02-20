@@ -1,0 +1,26 @@
+{
+  "editor.fontSize": 24,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "terminal.integrated.fontSize": 19,
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.formatOnSave": true,
+  "javascript.format.semicolons": "insert",
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "java.debug.settings.console": "internalConsole",
+  "java.debug.settings.forceBuildBeforeLaunch": false,
+  "java.silentNotification": true,
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java"
+  },
+  "bracketPairColorizer.depreciation-notice": false,
+  "prettier.semi": false
+}
