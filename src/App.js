@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, useMatch } from "react-router-dom";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
@@ -7,16 +7,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { loginUser, logoutUser } from "./reducers/userReducer";
 import Users from "./components/Users";
+import User from "./components/User";
+import { getUsers } from "./services/users";
 
 const App = () => {
   const dispatch = useDispatch();
   const notification = useSelector((state) => state.notification);
   const blogs = useSelector((state) => state.blogs);
   const user = useSelector((state) => state.users);
+  const [users, setUsers] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const blogFormRef = useRef();
+  const match = useMatch("/users/:id");
+  const singleUser = match
+    ? users.find((user) => user.id === match.params.id)
+    : null;
+
+  console.log(users);
+  console.log(singleUser);
 
   useEffect(() => {
     if (user !== null) {
@@ -30,6 +40,11 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON);
       dispatch(loginUser(user));
     }
+  }, []);
+
+  useEffect(async () => {
+    const response = await getUsers();
+    setUsers(response);
   }, []);
 
   const handleLogin = async (event) => {
@@ -90,7 +105,7 @@ const App = () => {
   }
 
   return (
-    <Router>
+    <>
       <h1>blogs</h1>
       {notification && <h2>{notification}</h2>}
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -113,9 +128,10 @@ const App = () => {
             </>
           }
         />
-        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User user={singleUser} />} />
+        <Route path="/users" element={<Users users={users} />} />
       </Routes>
-    </Router>
+    </>
   );
 };
 
