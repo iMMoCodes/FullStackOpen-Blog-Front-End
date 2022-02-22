@@ -9,6 +9,7 @@ import { loginUser, logoutUser } from "./reducers/userReducer";
 import Users from "./components/Users";
 import User from "./components/User";
 import { getUsers } from "./services/users";
+import BlogView from "./components/BlogView";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -20,13 +21,14 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const blogFormRef = useRef();
-  const match = useMatch("/users/:id");
-  const singleUser = match
-    ? users.find((user) => user.id === match.params.id)
+  const userMatch = useMatch("/users/:id");
+  const singleUser = userMatch
+    ? users.find((user) => user.id === userMatch.params.id)
     : null;
-
-  console.log(users);
-  console.log(singleUser);
+  const blogMatch = useMatch("/blogs/:id");
+  const singleBlog = blogMatch
+    ? blogs.find((blog) => blog.id === blogMatch.params.id)
+    : null;
 
   useEffect(() => {
     if (user !== null) {
@@ -106,7 +108,7 @@ const App = () => {
 
   return (
     <>
-      <h1>blogs</h1>
+      <h1>Blogs</h1>
       {notification && <h2>{notification}</h2>}
       <div style={{ display: "flex", alignItems: "center" }}>
         <h4>{user.name} logged in</h4>
@@ -130,6 +132,7 @@ const App = () => {
         />
         <Route path="/users/:id" element={<User user={singleUser} />} />
         <Route path="/users" element={<Users users={users} />} />
+        <Route path="/blogs/:id" element={<BlogView blog={singleBlog} />} />
       </Routes>
     </>
   );
