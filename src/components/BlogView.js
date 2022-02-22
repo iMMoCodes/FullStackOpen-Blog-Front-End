@@ -48,6 +48,12 @@ const BlogView = ({ blog }) => {
           Remove
         </button>
       )}
+      <h3>Comments</h3>
+      <ul>
+        {blog.comments.map((comment, idx) => {
+          return <li key={idx}>{comment.comment}</li>;
+        })}
+      </ul>
     </div>
   );
 };
