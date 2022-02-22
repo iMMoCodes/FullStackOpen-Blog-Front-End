@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, removeBlog } from "../reducers/blogReducer";
+import { commentBlog } from "../services/blogs";
 
 const BlogView = ({ blog }) => {
+  const [comment, setComment] = useState("");
   const user = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
@@ -18,6 +20,11 @@ const BlogView = ({ blog }) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       dispatch(removeBlog(blog.id));
     }
+  };
+
+  const handleComment = (id, content) => {
+    commentBlog(id, { comment: content });
+    setComment("");
   };
 
   if (!blog) {
@@ -49,6 +56,15 @@ const BlogView = ({ blog }) => {
         </button>
       )}
       <h3>Comments</h3>
+      <input
+        type="text"
+        name="comment"
+        value={comment}
+        onChange={({ target }) => setComment(target.value)}
+      />
+      <button onClick={() => handleComment(blog.id, comment)}>
+        Add comment
+      </button>
       <ul>
         {blog.comments.map((comment, idx) => {
           return <li key={idx}>{comment.comment}</li>;

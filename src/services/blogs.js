@@ -37,3 +37,19 @@ export const deleteBlog = async (id) => {
   };
   await axios.delete(`${baseUrl}/${id}`, config);
 };
+
+export const commentBlog = async (id, comment) => {
+  try {
+    const config = {
+      headers: { Authorization: token },
+    };
+    const response = await axios.post(
+      `${baseUrl}/${id}/comments`,
+      comment,
+      config
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
