@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Routes, Route, useMatch } from "react-router-dom";
+import { Routes, Route, useMatch, Link } from "react-router-dom";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
@@ -108,14 +108,23 @@ const App = () => {
 
   return (
     <>
-      <h1>Blogs</h1>
-      {notification && <h2>{notification}</h2>}
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: 300,
+        }}
+      >
+        <Link to="/">Blogs</Link>
+        <Link to="/users">Users</Link>
         <h4>{user.name} logged in</h4>
         <button style={{ marginLeft: 5, height: 25 }} onClick={handleLogout}>
           Logout
         </button>
       </div>
+      <h1>Blogs</h1>
+      {notification && <h2>{notification}</h2>}
       <Routes>
         <Route
           path="/"
