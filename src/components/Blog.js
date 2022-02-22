@@ -1,39 +1,39 @@
-import React, { useState } from 'react'
-import { update, deleteBlog } from '../services/blogs'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { likeBlog, removeBlog } from "../reducers/blogReducer";
+
 const Blog = ({ blog, user }) => {
-  const [buttonText, setButtonText] = useState('view')
+  const dispatch = useDispatch();
+  const [buttonText, setButtonText] = useState("view");
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
+    border: "solid",
     borderWidth: 1,
     marginBottom: 5,
-  }
+  };
 
   const handleClick = () => {
-    buttonText === 'view' ? setButtonText('hide') : setButtonText('view')
-  }
+    buttonText === "view" ? setButtonText("hide") : setButtonText("view");
+  };
 
   const handleLike = () => {
     const blogObject = {
-      user: blog.user.id,
+      ...blog,
       likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-    }
-    update(blogObject, blog.id)
-  }
+    };
+    dispatch(likeBlog(blogObject));
+  };
 
   const handleDelete = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      deleteBlog(blog.id)
+      dispatch(removeBlog(blog.id));
     }
-  }
+  };
 
   return (
     <>
-      <div style={blogStyle} className='blog'>
+      <div style={blogStyle} className="blog">
         {blog.title} {blog.author}
         <button
           onClick={handleClick}
@@ -41,12 +41,12 @@ const Blog = ({ blog, user }) => {
         >
           {buttonText}
         </button>
-        {buttonText === 'hide' && (
+        {buttonText === "hide" && (
           <>
             <p>URL : {blog.url}</p>
             <p>
-              Likes : {blog.likes}{' '}
-              <button onClick={handleLike} className='likeButton'>
+              Likes : {blog.likes}{" "}
+              <button onClick={handleLike} className="likeButton">
                 Like
               </button>
             </p>
@@ -56,9 +56,9 @@ const Blog = ({ blog, user }) => {
                 onClick={handleDelete}
                 style={{
                   marginBottom: 10,
-                  backgroundColor: 'lightblue',
+                  backgroundColor: "lightblue",
                   borderRadius: 5,
-                  border: '1px solid gray',
+                  border: "1px solid gray",
                 }}
               >
                 Remove
@@ -68,7 +68,7 @@ const Blog = ({ blog, user }) => {
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Blog
+export default Blog;
