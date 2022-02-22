@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { loginUser, logoutUser } from "./reducers/userReducer";
+import Users from "./components/Users";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -88,7 +90,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <Router>
       <h1>blogs</h1>
       {notification && <h2>{notification}</h2>}
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -97,13 +99,23 @@ const App = () => {
           Logout
         </button>
       </div>
-      <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-        <BlogForm blogFormRef={blogFormRef} />
-      </Togglable>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} />
-      ))}
-    </>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+                <BlogForm blogFormRef={blogFormRef} />
+              </Togglable>
+              {blogs.map((blog) => (
+                <Blog key={blog.id} blog={blog} user={user} />
+              ))}
+            </>
+          }
+        />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </Router>
   );
 };
 
